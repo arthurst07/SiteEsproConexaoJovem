@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conexão Jovem — Jornal digital</title>
+    <meta name="description" content="Conexão Jovem: o portal de notícias e cultura feito por e para a juventude.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- CABEÇALHO / NAVBAR -->
+    <header>
+        <div class="top-bar">
+            <div class="container flex-between">
+                <span class="date" id="current-date">Terça-feira, 11 de Agosto de 2026</span>
+                <div class="top-right-actions">
+                    <div class="social-icons">
+                        <span>Jornal da turma</span>
+                    </div>
+                    <button id="intranet-access-btn" class="intranet-top-btn" type="button"><i class="fas fa-lock"></i> Área do Funcionário</button>
+                </div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <div class="container flex-between">
+                <div class="logo">
+                    <h1>CONEXÃO<span>JOVEM</span></h1>
+                </div>
+                <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+                    <span aria-hidden="true">☰</span><span class="sr-only">Menu</span>
+                </button>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#" class="nav-btn active" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-btn" data-page="musica">Música</a></li>
+                    <li><a href="#" class="nav-btn" data-page="series">Séries &amp; Filmes</a></li>
+                    <li><a href="#" class="nav-btn" data-page="cultura">Cultura Pop</a></li>
+                    <li><a href="#" class="nav-btn" data-page="games">Games</a></li>
+                    <li><a href="#" class="nav-btn" data-page="moda">Moda</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="O que você procura?" aria-label="Buscar matérias">
+                    <button id="search-btn" type="button" aria-label="Buscar"><span aria-hidden="true">⌕</span><span class="sr-only">Buscar</span></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container" id="conteudo">
+        <div class="notice"><strong>Jornal laboratório.</strong> Projeto escolar de uma empresa fictícia. Os textos iniciais são exemplos editoriais; os indicadores da intranet são simulados.</div>
+        <p id="storage-warning" role="status"></p>
+
+        <noscript><p class="empty-msg">Ative o JavaScript para ver as notícias do Conexão Jovem.</p></noscript>
+
+        <!-- DESTAQUE PRINCIPAL (montado pelo script.js) -->
+        <section class="hero-section" id="hero-section" aria-label="Destaques"></section>
+
+        <!-- NOTÍCIAS -->
+        <section class="news-grid-section">
+            <div class="section-head">
+                <h3 class="section-title" id="section-title">Últimas do Rolê</h3>
+                <button id="clear-filter" class="clear-filter hidden" type="button"><i class="fas fa-times"></i> Limpar busca</button>
+            </div>
+            <div class="grid" id="news-grid"></div>
+            <p id="empty-msg" class="empty-msg hidden">Nenhuma matéria encontrada. Tente outra palavra ou escolha uma categoria.</p>
+        </section>
+
+        <!-- PRODUTOS DA EMPRESA (montado pelo script.js) -->
+        <section class="products-section" id="produtos">
+            <h3 class="section-title">Nossos Produtos</h3>
+            <div class="products-grid" id="products-grid"></div>
+        </section>
+
+        <!-- NEWSLETTER -->
+        <section class="newsletter-section" id="newsletter">
+            <div>
+                <h3>Leia o Conexão Weekly</h3>
+                <p>Uma seleção das matérias publicadas para ler agora. Nesta demonstração não coletamos e-mails.</p>
+            </div>
+            <button type="button" id="weekly-btn" class="action primary">Abrir edição</button>
+        </section>
+
+    </main>
+
+
+    <!-- MODAL GERAL (Notícias, institucional) -->
+    <div id="news-modal" class="modal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true">
+            <span class="close-modal" role="button" tabindex="0" aria-label="Fechar">&times;</span>
+            <div id="modal-body-content"></div>
+        </div>
+    </div>
+
+
+    <!-- MODAL DA INTRANET (Área do Funcionário) -->
+    <div id="intranet-modal" class="modal" aria-hidden="true">
+        <div class="modal-content intranet-box" role="dialog" aria-modal="true">
+            <span class="close-intranet" role="button" tabindex="0" aria-label="Fechar">&times;</span>
+
+            <!-- TELA DE LOGIN -->
+            <div id="intranet-login-view">
+                <h2><i class="fas fa-lock"></i> Intranet Conexão Jovem</h2>
+                <p>Simulação escolar: entre com a conta demonstrativa do seu setor. Não utilize senhas pessoais.</p>
+                <form id="intranet-login-form" class="login-form" novalidate>
+                    <div class="input-group">
+                        <label for="employee-email"><i class="fas fa-envelope"></i> E-mail Corporativo</label>
+                        <input type="email" id="employee-email" placeholder="conexaojovemprod@gmail.com" autocomplete="username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="employee-pass"><i class="fas fa-key"></i> Senha</label>
+                        <input type="password" id="employee-pass" placeholder="••••••••" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="login-submit-btn">Acessar Sistema</button>
+                    <span id="login-error" class="login-error hidden" role="alert">Credenciais inválidas. Tente novamente.</span>
+                </form>
+                <details class="demo-accounts"><summary>Contas de demonstração</summary><p>Todos os e-mails terminam em @gmail.com.</p><ul id="demo-accounts-list"></ul><p>As contas são públicas e servem apenas à apresentação.</p></details>
+            </div>
+
+            <!-- PAINEL RESTRITO POR SETOR -->
+            <div id="intranet-dashboard-view" class="hidden">
+                <div class="dashboard-header">
+                    <div>
+                        <h2><i class="fas fa-building"></i> Painel Interno - <span id="user-sector-title">Setor</span></h2>
+                        <p class="welcome-msg">Bem-vindo(a), <span id="user-email-display"></span> | <span class="badge-sm orange">Ambiente demonstrativo</span></p>
+                    </div>
+                    <button id="logout-btn" class="logout-btn" type="button"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+
+                <div class="company-routine-box">
+                    <h4><i class="fas fa-info-circle"></i> Mural de Avisos &amp; Rotina da Empresa</h4>
+                    <ul id="mural-list"></ul>
+                </div>
+
+                <a class="action primary editorial-access" href="paginas/redacao.html">Abrir redação · Criar e editar matérias</a>
+                <div id="sector-dashboard-content" class="sector-dashboard"></div>
+
+                <a id="sector-page-link" class="login-submit-btn sector-link" href="#">Abrir página completa do setor <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- RODAPÉ -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <h2 class="marca">CONEXÃO<span>JOVEM</span></h2>
+                <p>O portal de notícias e cultura feito por e para a juventude.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Categorias</h4>
+                <ul>
+                    <li><a href="#" class="nav-btn" data-page="musica">Música</a></li>
+                    <li><a href="#" class="nav-btn" data-page="series">Séries &amp; Filmes</a></li>
+                    <li><a href="#" class="nav-btn" data-page="cultura">Cultura Pop</a></li>
+                    <li><a href="#" class="nav-btn" data-page="games">Games</a></li>
+                    <li><a href="#" class="nav-btn" data-page="moda">Moda</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Institucional</h4>
+                <ul>
+                    <li><a href="#" class="footer-link" data-info="quem-somos">Quem Somos</a></li>
+                    <li><a href="#" class="footer-link" data-info="trabalhe">Participe da redação</a></li>
+                    <li><a href="#" class="footer-link" data-info="privacidade">Política de Privacidade</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Conexão Jovem. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="dados.js"></script>
+    <script src="editorial.js"></script>
+    <script src="script.js"></script>
+    <script src="acessibilidade.js"></script>
+</body>
+</html>
