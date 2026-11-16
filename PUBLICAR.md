@@ -1,23 +1,14 @@
-# Como colocar o site no ar (link grátis com GitHub Pages)
+# Publicação opcional do código com GitHub Pages
 
-O site é estático (HTML, CSS e JS), então dá para publicar de graça.
+Para a apresentação imediata, a forma recomendada é abrir localmente conforme APRESENTACAO.md. Não dependa de um link ainda não publicado: o endereço de Pages foi consultado nesta revisão e retornou 404.
 
-1. Suba esta pasta para o repositório do grupo no GitHub (todos os arquivos, inclusive `index.html` da raiz e `.nojekyll`).
-2. No GitHub, abra o repositório: **Settings → Pages**.
-3. Em **Build and deployment**, escolha **Deploy from a branch**, branch **main** e pasta **/ (root)**. Clique em **Save**.
-4. Espere 1 a 2 minutos. O endereço aparece na mesma tela, no formato:
-   `https://SEU-USUARIO.github.io/NOME-DO-REPOSITORIO/`
-   (a página inicial redireciona para `SiteEspro/index.html`).
+Para ativar futuramente:
 
-Alternativa sem GitHub: arraste a pasta inteira em https://app.netlify.com/drop
+1. No repositório do grupo, abra **Settings → Pages**.
+2. Escolha **Deploy from a branch**, branch **main** e pasta **/ (root)**.
+3. Salve e aguarde o endereço fornecido pelo GitHub.
+4. Teste o endereço antes de compartilhá-lo. O index.html da raiz redireciona ao portal.
 
-## Depois de publicar
-- Teste no celular e no computador.
-- Se alguma foto não aparecer, troque o código dela em `SiteEspro/dados.js` (objeto `IMAGENS`).
-- Cada mudança no GitHub atualiza o site sozinho.
+A publicação do código não sincroniza as matérias criadas no navegador nem o chat local. Outro visitante verá o acervo inicial, salvo se importar um backup no próprio navegador. O Firebase do chat, se configurado, cuida apenas das mensagens.
 
-## Atenção ao abrir o site direto do computador (sem publicar)
-No **Chrome/Edge** funciona normalmente. No **Firefox**, cada arquivo local é tratado como um site separado e o login não passa do portal para as páginas de setor/chat. Por isso, para apresentar, **use o link publicado**.
-
-## Publicação de matérias pela redação
-A publicação do código no GitHub Pages não publica automaticamente para outros visitantes as matérias criadas no navegador. O editor da Área do Funcionário usa armazenamento local. Veja `REDACAO.md` para autoria por e-mail, backup e limites da simulação.
+Nunca apresente um repositório de código como se fosse automaticamente um site hospedado. Para hoje, use o servidor local e o roteiro.

@@ -11,7 +11,7 @@ Nossa colaboração para este trabalho é um site, disponibilizado nestes arquiv
 ```
 SiteEspro/
 ├── index.html        (portal público + intranet)
-├── script.js         (lógica do portal: categorias, busca, newsletter, login)
+├── script.js         (portal: categorias, busca, edição Weekly e login)
 ├── dados.js          (conteúdo: notícias, produtos, contas e painéis dos setores)
 ├── paginas/
 │   ├── gestao.html
@@ -55,3 +55,6 @@ Matérias, números dos painéis e dados da empresa (missão, SWOT, orçamento..
 
 ## Redação e permissões
 Veja `REDACAO.md`. A permissão pertence ao e-mail da conta; contas compartilhadas por setor compartilham também a autoria. As publicações ficam no navegador, não no GitHub nem no Firebase do chat.
+
+## Entrega final
+Use APRESENTACAO.md como roteiro principal. A Weekly abre uma seleção do acervo, sem coleta ou envio de e-mail. Podcast e vídeos permanecem planejados; o Instagram não está conectado. O chat entregue funciona no mesmo navegador. Não é preciso configurar serviços para apresentar localmente.

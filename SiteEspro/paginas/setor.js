@@ -61,10 +61,10 @@
     /* ---- Tarefas (marcadas ficam salvas neste navegador) ---- */
     const chaveTarefas = "cj_tarefas_" + setorId;
     function lerTarefas() {
-        try { return JSON.parse(localStorage.getItem(chaveTarefas)) || []; } catch (e) { return []; }
+        try { const lista = JSON.parse(localStorage.getItem(chaveTarefas)); return Array.isArray(lista) ? lista : []; } catch (e) { return []; }
     }
     function gravarTarefas(lista) {
-        try { localStorage.setItem(chaveTarefas, JSON.stringify(lista)); } catch (e) { /* ignora */ }
+        try { localStorage.setItem(chaveTarefas, JSON.stringify(lista)); return true; } catch (e) { return false; }
     }
 
     function moeda(v) {
@@ -183,7 +183,7 @@
         <section class="painel-card">
             <h3>Checklist do setor</h3>
             <p class="dica">Suas marcações ficam salvas neste navegador.</p>
-            <ul class="checklist" id="checklist"></ul>
+            <ul class="checklist" id="checklist"></ul><p id="checklist-msg" role="status"></p>
         </section>`;
 
     const checklist = $("checklist");
@@ -203,7 +203,9 @@
         const i = Number(box.getAttribute("data-i"));
         let feitas = lerTarefas();
         feitas = box.checked ? feitas.concat(i) : feitas.filter(x => x !== i);
-        gravarTarefas(Array.from(new Set(feitas)));
+        const salva = gravarTarefas(Array.from(new Set(feitas)));
+        if (!salva) box.checked = !box.checked;
+        $("checklist-msg").textContent = salva ? 'Marcação salva neste navegador.' : 'Não foi possível salvar. Habilite o armazenamento do navegador e tente novamente.';
     });
     desenharChecklist();
 })();

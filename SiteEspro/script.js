@@ -71,6 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
         el.style.display = "flex";
         el.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
+        document.querySelectorAll('body > header, body > main, body > footer').forEach(n=>n.inert=true);
+        const dialog = el.querySelector('[role="dialog"]');
+        dialog.setAttribute('tabindex','-1');
+        dialog.setAttribute('aria-label',el === modal ? 'Leitura do jornal' : 'Área do Funcionário');
+        dialog.focus();
     }
 
     function fecharJanela(el) {
@@ -78,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         el.style.display = "none";
         el.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
+        document.querySelectorAll('body > header, body > main, body > footer').forEach(n=>n.inert=false);
         if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
     }
 
@@ -124,6 +130,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("keydown", e => {
+        if (e.key === 'Tab') {
+            const ativo = [modal,intranetModal].find(el=>el.style.display==='flex');
+            if (ativo) {
+                const dialog = ativo.querySelector('[role="dialog"]');
+                const itens = [...ativo.querySelectorAll('a[href],button,input,[tabindex="0"],summary')].filter(el=>!el.disabled && el.getClientRects().length);
+                if (!itens.length) { e.preventDefault(); dialog.focus(); }
+                else if(e.shiftKey && (document.activeElement===itens[0] || document.activeElement===dialog)) { e.preventDefault(); itens.at(-1).focus(); }
+                else if(!e.shiftKey && (document.activeElement===itens.at(-1) || document.activeElement===dialog)) { e.preventDefault(); itens[0].focus(); }
+            }
+        }
         if (e.key === "Escape") {
             fecharJanela(modal);
             fecharJanela(intranetModal);
@@ -139,9 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
         abrirNoticia(gatilho.getAttribute("data-id"));
     });
     document.addEventListener("keydown", e => {
-        if (e.key !== "Enter") return;
+        if (e.key !== "Enter" && e.key !== " ") return;
         const gatilho = e.target.closest && e.target.closest(".news-trigger");
-        if (gatilho && gatilho.tagName !== "A") abrirNoticia(gatilho.getAttribute("data-id"));
+        if (gatilho && gatilho.tagName !== "A") { e.preventDefault(); abrirNoticia(gatilho.getAttribute("data-id")); }
     });
 
 
@@ -259,7 +275,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     montarDestaque();
     renderizar();
+    let versaoDoPortal = CJ.snapshot();
     function atualizarAcervo() {
+        if (versaoDoPortal === CJ.snapshot()) return;
+        versaoDoPortal = CJ.snapshot();
         montarDestaque(); renderizar(); $("editorial-warning").textContent = CJ.erro;
         fecharJanela(modal);
     }
@@ -278,9 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", e => {
             e.preventDefault();
             const page = button.getAttribute("data-page");
-            if (!CATEGORIAS[page]) return;
+            if (!Object.hasOwn(CATEGORIAS, page)) return;
             categoriaAtual = page;
             termoBusca = "";
+            $("search-input").value = "";
             renderizar();
             navLinks.classList.remove("open");
             menuToggle.setAttribute("aria-expanded", "false");
@@ -306,6 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const consulta = searchInput.value.trim();
         if (consulta === "" && termoBusca === "") return;
         termoBusca = consulta;
+        menuToggle.setAttribute("aria-expanded", "false");
         if (consulta === "") categoriaAtual = "home";
         renderizar();
         navLinks.classList.remove("open");
@@ -333,34 +354,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>${escapeHTML(p.desc)}</p>
         </div>`).join("");
 
-    const newsletterForm = $("newsletter-form");
-    const newsletterEmail = $("newsletter-email");
-    const newsletterMsg = $("newsletter-msg");
-
-    newsletterForm.addEventListener("submit", e => {
-        e.preventDefault();
-        const email = newsletterEmail.value.trim().toLowerCase();
-        const valido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-        newsletterMsg.className = "newsletter-msg";
-
-        if (!valido) {
-            newsletterMsg.textContent = "Digite um e-mail válido.";
-            newsletterMsg.classList.add("erro");
-            return;
-        }
-
-        const lista = armazenamento.ler("localStorage", "cj_newsletter") || [];
-        if (lista.includes(email)) {
-            newsletterMsg.textContent = "Esse e-mail já está inscrito. Valeu!";
-        } else {
-            lista.push(email);
-            armazenamento.gravar("localStorage", "cj_newsletter", lista);
-            newsletterMsg.textContent = "Inscrição feita! Você vai receber o Conexão Weekly.";
-        }
-        newsletterMsg.classList.add("ok");
-        newsletterForm.reset();
+    $("weekly-btn").addEventListener("click", () => {
+        const publicadas = CJ.publicadas().slice(0,5);
+        openModal("Conexão Weekly", `<p>Seleção do acervo publicado, para leitura no site. Esta demonstração não envia e-mails.</p>${publicadas.length ? publicadas.map(n=>`<section class="weekly-item"><h3><a href="#" class="news-trigger" data-id="${n.id}">${escapeHTML(n.titulo)}</a></h3><p>${escapeHTML(n.resumo)}</p></section>`).join("") : "<p>A próxima edição está em preparação.</p>"}`);
     });
-
 
     // =========================================================
     // 7. PÁGINAS INSTITUCIONAIS (rodapé)

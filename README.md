@@ -1,15 +1,25 @@
-# Conexão Jovem — versão 3 com redação
+# Conexão Jovem — entrega final
 
-Versão baseada em **Espro-main-v3.zip**, preservando fotos, chat da equipe, orçamento, organograma e demais painéis.
+Jornal digital do projeto escolar, preservando as editorias, as fotos, o visual geral, o chat e os painéis de gestão. Sem novas matérias ou seções de conteúdo nesta revisão.
 
-**Todos os funcionários podem publicar e editar suas próprias matérias, inclusive depois de publicadas.** Acesse **Área do Funcionário → Minhas matérias · Publicar e editar**. Produção e Gestão mantêm a administração do acervo.
+## Abrir e apresentar
 
-- [Guia de publicação, permissões e armazenamento](REDACAO.md)
-- [Documentação geral](Geral.md)
-- [Publicar o código no GitHub Pages](PUBLICAR.md)
-- [Chat da equipe](CHAT.md)
-- [Roteiro de apresentação](APRESENTACAO.md)
+1. Baixe em **Code → Download ZIP** e extraia tudo.
+2. Com Python 3 instalado, no Windows abra **ABRIR_SITE.bat**. Nos demais sistemas, execute `python3 iniciar.py`.
+3. Abra **http://127.0.0.1:8080** e mantenha o servidor ligado.
+4. Siga o [roteiro intuitivo de apresentação](APRESENTACAO.md), com contas, cliques, falas sugeridas e plano de contingência.
 
-Para baixar: **Code → Download ZIP**. Extraia tudo e execute `python iniciar.py` (ou `py iniciar.py` no Windows) com Python 3 instalado. Abra `http://127.0.0.1:8080`.
+## Recursos
 
-As matérias ficam neste navegador, sem sincronização entre computadores; não são enviadas ao GitHub ou ao Firebase do chat. Use backup para transportar o acervo. O login e as contas são demonstrativos. Consulte REDACAO.md para os limites da simulação e a diferença entre contas por setor e contas por pessoa.
+Portal, busca, editorias, matérias, Weekly para leitura, login demonstrativo, publicação/edição própria por todos os setores, rascunhos/revisão opcionais, backup, chat local, checklists e painéis de gestão.
+
+A Weekly não envia e-mails. Podcast, vídeos e Instagram estão identificados como produtos/perfil planejados, sem conteúdo publicado. As matérias e os KPIs iniciais são exemplos acadêmicos.
+
+As matérias e o chat padrão ficam no mesmo navegador. Contas por setor compartilham a autoria. Não há autenticação real de servidor ou sincronização entre aparelhos; use backup para transportar as matérias.
+
+- [Roteiro completo e logins](APRESENTACAO.md)
+- [Redação e permissões](REDACAO.md)
+- [Chat](CHAT.md)
+- [GitHub Pages, opcional](PUBLICAR.md)
+
+O código foi conferido e os fluxos principais foram testados. A verificação final completa no navegador foi interrompida por indisponibilidade do ambiente; ensaie no computador que será usado, conforme o roteiro.
