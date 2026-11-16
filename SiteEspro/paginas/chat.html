@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat da equipe | Conexão Jovem</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%B0%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="pagina-setor">
+
+    <header class="setor-header">
+        <div class="container flex-between">
+            <a class="logo" href="../index.html" aria-label="Voltar ao portal"><h1>CONEXÃO<span>JOVEM</span></h1></a>
+            <div class="setor-user">
+                <a class="voltar-link-escuro" href="redacao.html">Minhas matérias</a>
+                <a id="meu-setor" class="voltar-link-escuro" href="../index.html"><i class="fas fa-building"></i> Meu setor</a>
+                <span id="usuario-logado"></span>
+                <button id="sair-btn" class="logout-btn" type="button"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="chat-main">
+        <noscript><p class="empty-msg">Ative o JavaScript para usar o chat.</p></noscript>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p><a class="voltar-link" href="../index.html"><i class="fas fa-arrow-left"></i> Voltar ao portal</a> &nbsp;|&nbsp; &copy; 2026 Conexão Jovem. Área restrita aos funcionários.</p>
+        </div>
+    </footer>
+
+    <script src="../dados.js"></script>
+    <script src="../editorial.js"></script>
+    <script src="chat.js"></script>
+</body>
+</html>

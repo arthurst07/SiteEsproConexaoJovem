@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conexão Jovem — Jornal digital</title>
+    <title>Conexão Jovem - Cultura e Entretenimento</title>
     <meta name="description" content="Conexão Jovem: o portal de notícias e cultura feito por e para a juventude.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%B0%3C/text%3E%3C/svg%3E">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Conexão Jovem - Cultura e Entretenimento">
+    <meta property="og:description" content="Música, séries, games, cultura pop e moda: o jornal digital feito por jovens, para jovens.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=70">
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
     <!-- CABEÇALHO / NAVBAR -->
     <header>
@@ -17,7 +23,7 @@
                 <span class="date" id="current-date">Terça-feira, 11 de Agosto de 2026</span>
                 <div class="top-right-actions">
                     <div class="social-icons">
-                        <span>Jornal da turma</span>
+                        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                     </div>
                     <button id="intranet-access-btn" class="intranet-top-btn" type="button"><i class="fas fa-lock"></i> Área do Funcionário</button>
                 </div>
@@ -29,7 +35,7 @@
                     <h1>CONEXÃO<span>JOVEM</span></h1>
                 </div>
                 <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
-                    <span aria-hidden="true">☰</span><span class="sr-only">Menu</span>
+                    <i class="fas fa-bars"></i>
                 </button>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#" class="nav-btn active" data-page="home">Home</a></li>
@@ -41,7 +47,7 @@
                 </ul>
                 <div class="search-box">
                     <input type="text" id="search-input" placeholder="O que você procura?" aria-label="Buscar matérias">
-                    <button id="search-btn" type="button" aria-label="Buscar"><span aria-hidden="true">⌕</span><span class="sr-only">Buscar</span></button>
+                    <button id="search-btn" type="button" aria-label="Buscar"><i class="fas fa-search"></i></button>
                 </div>
             </div>
         </nav>
@@ -49,10 +55,9 @@
 
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="container" id="conteudo">
-        <div class="notice"><strong>Jornal laboratório.</strong> Projeto escolar de uma empresa fictícia. Os textos iniciais são exemplos editoriais; os indicadores da intranet são simulados.</div>
-        <p id="storage-warning" role="status"></p>
+    <main class="container">
 
+        <p id="editorial-warning" class="dica" role="status"></p>
         <noscript><p class="empty-msg">Ative o JavaScript para ver as notícias do Conexão Jovem.</p></noscript>
 
         <!-- DESTAQUE PRINCIPAL (montado pelo script.js) -->
@@ -77,10 +82,14 @@
         <!-- NEWSLETTER -->
         <section class="newsletter-section" id="newsletter">
             <div>
-                <h3>Leia o Conexão Weekly</h3>
-                <p>Uma seleção das matérias publicadas para ler agora. Nesta demonstração não coletamos e-mails.</p>
+                <h3>Receba o Conexão Weekly</h3>
+                <p>O melhor da semana em cultura jovem, direto no seu e-mail. Sem spam.</p>
             </div>
-            <button type="button" id="weekly-btn" class="action primary">Abrir edição</button>
+            <form id="newsletter-form" class="newsletter-form" novalidate>
+                <input type="email" id="newsletter-email" placeholder="seu@email.com" aria-label="Seu e-mail" required>
+                <button type="submit">Quero receber</button>
+                <span id="newsletter-msg" class="newsletter-msg" role="status"></span>
+            </form>
         </section>
 
     </main>
@@ -103,11 +112,11 @@
             <!-- TELA DE LOGIN -->
             <div id="intranet-login-view">
                 <h2><i class="fas fa-lock"></i> Intranet Conexão Jovem</h2>
-                <p>Simulação escolar: entre com a conta demonstrativa do seu setor. Não utilize senhas pessoais.</p>
+                <p>Área restrita aos colaboradores. Entre com o e-mail e a senha do seu setor:</p>
                 <form id="intranet-login-form" class="login-form" novalidate>
                     <div class="input-group">
                         <label for="employee-email"><i class="fas fa-envelope"></i> E-mail Corporativo</label>
-                        <input type="email" id="employee-email" placeholder="conexaojovemprod@gmail.com" autocomplete="username" required>
+                        <input type="email" id="employee-email" placeholder="seu.setor@conexaojovem.com.br" autocomplete="username" required>
                     </div>
                     <div class="input-group">
                         <label for="employee-pass"><i class="fas fa-key"></i> Senha</label>
@@ -116,7 +125,6 @@
                     <button type="submit" class="login-submit-btn">Acessar Sistema</button>
                     <span id="login-error" class="login-error hidden" role="alert">Credenciais inválidas. Tente novamente.</span>
                 </form>
-                <details class="demo-accounts"><summary>Contas de demonstração</summary><p>Todos os e-mails terminam em @gmail.com.</p><ul id="demo-accounts-list"></ul><p>As contas são públicas e servem apenas à apresentação.</p></details>
             </div>
 
             <!-- PAINEL RESTRITO POR SETOR -->
@@ -124,7 +132,7 @@
                 <div class="dashboard-header">
                     <div>
                         <h2><i class="fas fa-building"></i> Painel Interno - <span id="user-sector-title">Setor</span></h2>
-                        <p class="welcome-msg">Bem-vindo(a), <span id="user-email-display"></span> | <span class="badge-sm orange">Ambiente demonstrativo</span></p>
+                        <p class="welcome-msg">Bem-vindo(a), <span id="user-email-display"></span> | <span class="badge-sm orange">Nível de Acesso: Confidencial</span></p>
                     </div>
                     <button id="logout-btn" class="logout-btn" type="button"><i class="fas fa-sign-out-alt"></i> Sair</button>
                 </div>
@@ -134,10 +142,11 @@
                     <ul id="mural-list"></ul>
                 </div>
 
-                <a class="action primary editorial-access" href="paginas/redacao.html">Abrir redação · Criar e editar matérias</a>
                 <div id="sector-dashboard-content" class="sector-dashboard"></div>
 
+                <a class="login-submit-btn sector-link" href="paginas/redacao.html">Minhas matérias · Publicar e editar</a>
                 <a id="sector-page-link" class="login-submit-btn sector-link" href="#">Abrir página completa do setor <i class="fas fa-arrow-right"></i></a>
+                <a class="login-submit-btn sector-link chat-link" href="paginas/chat.html"><i class="fas fa-comments"></i> Abrir chat da equipe</a>
             </div>
         </div>
     </div>
@@ -164,19 +173,19 @@
                 <h4>Institucional</h4>
                 <ul>
                     <li><a href="#" class="footer-link" data-info="quem-somos">Quem Somos</a></li>
-                    <li><a href="#" class="footer-link" data-info="trabalhe">Participe da redação</a></li>
+                    <li><a href="#" class="footer-link" data-info="trabalhe">Trabalhe Conosco</a></li>
                     <li><a href="#" class="footer-link" data-info="privacidade">Política de Privacidade</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Conexão Jovem. Todos os direitos reservados.</p>
+            <p class="aviso-demo">Projeto acadêmico: a empresa, as matérias e os números exibidos são fictícios, criados para a atividade do curso. Fotos: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</p>
         </div>
     </footer>
 
     <script src="dados.js"></script>
     <script src="editorial.js"></script>
     <script src="script.js"></script>
-    <script src="acessibilidade.js"></script>
 </body>
 </html>

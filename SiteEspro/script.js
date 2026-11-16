@@ -42,8 +42,7 @@ const GRADIENTES = {
 document.addEventListener("DOMContentLoaded", () => {
     const $ = id => document.getElementById(id);
     let noticias = CJ.publicadas();
-    $("storage-warning").textContent = CJ.erro;
-    $("demo-accounts-list").innerHTML = Object.entries(USUARIOS).map(([email,u]) => `<li><strong>${escapeHTML(SETORES[u.setor].titulo)}</strong><br>${escapeHTML(email)} · Senha: <code>${escapeHTML(u.senha)}</code></li>`).join("");
+    $("editorial-warning").textContent = CJ.erro;
 
     // =========================================================
     // 1. DATA ATUAL
@@ -97,11 +96,16 @@ document.addEventListener("DOMContentLoaded", () => {
             ? `<div class="related"><h4>Leia também</h4>${relacionadas.map(r =>
                 `<a href="#" class="related-link news-trigger" data-id="${r.id}">${escapeHTML(r.titulo)}</a>`).join("")}</div>`
             : "";
+        const foto = imagemUrl(n, 1000);
+        const fotoHTML = foto
+            ? `<figure class="article-figure"><img src="${foto}" alt="Foto ilustrativa: ${escapeHTML(n.label)}"><figcaption>${escapeHTML(imagemCredito(n))}</figcaption></figure>`
+            : "";
         openModal(n.titulo, `
+            ${fotoHTML}
             <span class="badge">${escapeHTML(n.label)}</span>
             <p class="article-meta">Por ${escapeHTML(n.autor)} • ${escapeHTML(n.tempo)}</p>
             ${n.texto.map(p => `<p>${escapeHTML(p)}</p>`).join("")}
-            ${n.fontes.length ? `<h3>Fontes e referências</h3><ul class="article-sources">${n.fontes.map(f=>`<li><a href="${escapeHTML(f.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(f.nome)}</a></li>`).join("")}</ul>` : `<p class="dica">Texto demonstrativo da edição escolar.</p>`}
+            ${n.fontes.length ? `<h3>Fontes e referências</h3><ul>${n.fontes.map(f=>`<li><a href="${escapeHTML(f.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(f.nome)}</a></li>`).join('')}</ul>` : ''}
             ${maisHTML}
         `);
     }
@@ -135,10 +139,21 @@ document.addEventListener("DOMContentLoaded", () => {
         abrirNoticia(gatilho.getAttribute("data-id"));
     });
     document.addEventListener("keydown", e => {
-        if (e.key !== "Enter" && e.key !== " ") return;
+        if (e.key !== "Enter") return;
         const gatilho = e.target.closest && e.target.closest(".news-trigger");
-        if (gatilho && gatilho.tagName !== "A") { e.preventDefault(); abrirNoticia(gatilho.getAttribute("data-id")); }
+        if (gatilho && gatilho.tagName !== "A") abrirNoticia(gatilho.getAttribute("data-id"));
     });
+
+
+    /* Se uma foto não carregar, remove a imagem e deixa aparecer o fundo colorido */
+    document.addEventListener("error", e => {
+        const img = e.target;
+        if (!img || img.tagName !== "IMG") return;
+        if (img.classList.contains("side-thumb")) { img.remove(); return; }
+        const caixa = img.closest(".article-figure");
+        if (caixa) { caixa.remove(); return; }
+        img.remove();
+    }, true);
 
 
     // =========================================================
@@ -154,14 +169,26 @@ document.addEventListener("DOMContentLoaded", () => {
     let categoriaAtual = "home";
     let termoBusca = "";
 
+    /* Fundo do destaque principal: foto com camada escura por cima */
+    function estiloFundo(n) {
+        const foto = imagemUrl(n, 1200);
+        if (!foto) return "";
+        return ` style="background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.85)), url('${foto}') center / cover no-repeat, linear-gradient(135deg, #1a1a1a, #2c3e50);"`;
+    }
+
+    function miniaturaHTML(n) {
+        const foto = imagemUrl(n, 240);
+        return foto ? `<img class="side-thumb" src="${foto}" alt="" loading="lazy">` : "";
+    }
+
     function montarDestaque() {
         noticias = CJ.publicadas();
-        const selecionadas = noticias.filter(n => n.destaque).slice(0,4);
-        IDS_DESTAQUE = selecionadas.map(n => n.id);
-        if (!selecionadas.length) { heroSection.innerHTML = ''; return; }
-        const [principal, ...laterais] = selecionadas;
+        const selecionadas = noticias.filter(n=>n.destaque).slice(0,4);
+        IDS_DESTAQUE = selecionadas.map(n=>n.id);
+        if (!selecionadas.length) { heroSection.innerHTML=''; return; }
+        const [principal,...laterais] = selecionadas;
         heroSection.innerHTML = `
-            <div class="hero-main news-trigger" data-id="${principal.id}" tabindex="0" role="button">
+            <div class="hero-main news-trigger" data-id="${principal.id}" tabindex="0" role="button"${estiloFundo(principal)}>
                 <div class="badge">EM DESTAQUE • ${escapeHTML(principal.label)}</div>
                 <h2>${escapeHTML(principal.titulo)}</h2>
                 <p>${escapeHTML(principal.resumo)}</p>
@@ -170,8 +197,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="hero-sidebar">
                 ${laterais.map(n => `
                     <div class="side-news news-trigger" data-id="${n.id}" tabindex="0" role="button">
-                        <span class="badge-sm ${n.cor}">${escapeHTML(n.label)}</span>
-                        <h4>${escapeHTML(n.titulo)}</h4>
+                        ${miniaturaHTML(n)}
+                        <div class="side-text">
+                            <span class="badge-sm ${n.cor}">${escapeHTML(n.label)}</span>
+                            <h4>${escapeHTML(n.titulo)}</h4>
+                        </div>
                     </div>`).join("")}
             </div>`;
     }
@@ -181,12 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <article class="news-card news-trigger" data-id="${n.id}" tabindex="0" role="button">
                 <div class="card-img" style="background: ${n.grad || GRADIENTES[n.cor]};">
                     <i class="fas ${n.icone}"></i>
+                    ${imagemUrl(n, 640) ? `<img src="${imagemUrl(n, 640)}" alt="Foto ilustrativa: ${escapeHTML(n.label)}" loading="lazy">` : ""}
                 </div>
                 <div class="card-content">
                     <span class="badge-sm ${n.cor}">${escapeHTML(n.label)}</span>
                     <h4>${escapeHTML(n.titulo)}</h4>
                     <p>${escapeHTML(n.resumo)}</p>
-                    <span class="article-meta">${escapeHTML(n.tempo)}</span>
                 </div>
             </article>`;
     }
@@ -229,8 +259,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     montarDestaque();
     renderizar();
-    window.addEventListener("storage", e => { if (e.key === "cj_editorial_v1") { montarDestaque(); renderizar(); $("storage-warning").textContent = CJ.erro; fecharJanela(modal); } });
-    window.addEventListener("focus", () => { montarDestaque(); renderizar(); });
+    function atualizarAcervo() {
+        montarDestaque(); renderizar(); $("editorial-warning").textContent = CJ.erro;
+        fecharJanela(modal);
+    }
+    window.addEventListener("storage",e=>{if(e.key==='cj_editorial_v1') atualizarAcervo();});
+    window.addEventListener("focus",atualizarAcervo);
+    window.addEventListener("pageshow",e=>{if(e.persisted) atualizarAcervo();});
 
 
     // =========================================================
@@ -243,10 +278,9 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", e => {
             e.preventDefault();
             const page = button.getAttribute("data-page");
-            if (!Object.hasOwn(CATEGORIAS, page)) return;
+            if (!CATEGORIAS[page]) return;
             categoriaAtual = page;
             termoBusca = "";
-            $("search-input").value = "";
             renderizar();
             navLinks.classList.remove("open");
             menuToggle.setAttribute("aria-expanded", "false");
@@ -272,7 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const consulta = searchInput.value.trim();
         if (consulta === "" && termoBusca === "") return;
         termoBusca = consulta;
-        menuToggle.setAttribute("aria-expanded", "false");
         if (consulta === "") categoriaAtual = "home";
         renderizar();
         navLinks.classList.remove("open");
@@ -300,10 +333,34 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>${escapeHTML(p.desc)}</p>
         </div>`).join("");
 
-    $("weekly-btn").addEventListener("click", () => {
-        const atuais = CJ.publicadas().slice(0,5);
-        openModal("Conexão Weekly · Edição para leitura", `<p>Uma seleção do acervo publicado. Sem cadastro ou envio por e-mail.</p>${atuais.length ? atuais.map(n=>`<section class="weekly-item"><h3><a href="#" class="news-trigger" data-id="${n.id}">${escapeHTML(n.titulo)}</a></h3><p>${escapeHTML(n.resumo)}</p></section>`).join('') : '<p>A redação está preparando a próxima edição.</p>'}`);
+    const newsletterForm = $("newsletter-form");
+    const newsletterEmail = $("newsletter-email");
+    const newsletterMsg = $("newsletter-msg");
+
+    newsletterForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const email = newsletterEmail.value.trim().toLowerCase();
+        const valido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+        newsletterMsg.className = "newsletter-msg";
+
+        if (!valido) {
+            newsletterMsg.textContent = "Digite um e-mail válido.";
+            newsletterMsg.classList.add("erro");
+            return;
+        }
+
+        const lista = armazenamento.ler("localStorage", "cj_newsletter") || [];
+        if (lista.includes(email)) {
+            newsletterMsg.textContent = "Esse e-mail já está inscrito. Valeu!";
+        } else {
+            lista.push(email);
+            armazenamento.gravar("localStorage", "cj_newsletter", lista);
+            newsletterMsg.textContent = "Inscrição feita! Você vai receber o Conexão Weekly.";
+        }
+        newsletterMsg.classList.add("ok");
+        newsletterForm.reset();
     });
+
 
     // =========================================================
     // 7. PÁGINAS INSTITUCIONAIS (rodapé)
@@ -365,14 +422,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function abrirIntranet() {
-        const sessao = armazenamento.ler("sessionStorage", CHAVE_SESSAO);
-        if (sessao && CJ.sessao()) {
+        const sessao = CJ.sessao();
+        if (sessao && SETORES[sessao.setor]) {
             mostrarPainel(sessao);
         } else {
             mostrarLogin();
         }
         abrirJanela(intranetModal);
-
+        if (!sessao) $("employee-email").focus();
     }
 
     intranetBtn.addEventListener("click", abrirIntranet);
