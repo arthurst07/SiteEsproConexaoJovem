@@ -13,6 +13,10 @@
             .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
+    function lerSessao() {
+        try { return JSON.parse(sessionStorage.getItem(CHAVE_SESSAO)); } catch (e) { return null; }
+    }
+
     function classeStatus(status) {
         const s = status.toLowerCase();
         if (/(conclu|no ar|aprovad|entregue)/.test(s)) return "ok";
@@ -63,11 +67,82 @@
         try { localStorage.setItem(chaveTarefas, JSON.stringify(lista)); } catch (e) { /* ignora */ }
     }
 
+    function moeda(v) {
+        return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function orgHTML(no) {
+        const filhos = (no.filhos || []).map(f => `<li><div class="org-no">${esc(f.nome)}</div></li>`).join("");
+        return `<div class="org"><div class="org-no org-raiz">${esc(no.nome)}</div>` +
+            (filhos ? `<ul class="org-filhos">${filhos}</ul>` : "") + `</div>`;
+    }
+
+    /* Missão, visão, valores, organograma, SWOT, cronograma e orçamento */
+    function gestaoExtras() {
+        const e = EMPRESA;
+        const totalDesp = e.orcamento.despesas.reduce((t, d) => t + d.valor, 0);
+        const saldo = e.orcamento.receita - totalDesp;
+        const sw = e.swot;
+        const quad = (titulo, classe, lista) =>
+            `<div class="swot-q ${classe}"><h4>${titulo}</h4><ul>${lista.map(i => `<li>${esc(i)}</li>`).join("")}</ul></div>`;
+
+        return `
+        <section class="blocos-grid">
+            <div class="painel-card">
+                <h3>Missão</h3><p>${esc(e.missao)}</p>
+                <h3 class="sub">Visão</h3><p>${esc(e.visao)}</p>
+            </div>
+            <div class="painel-card">
+                <h3>Valores</h3>
+                <ul>${e.valores.map(v => `<li>${esc(v)}</li>`).join("")}</ul>
+            </div>
+        </section>
+
+        <section class="painel-card">
+            <h3>Organograma</h3>
+            ${orgHTML(e.organograma)}
+        </section>
+
+        <section class="painel-card">
+            <h3>Análise SWOT</h3>
+            <div class="swot">
+                ${quad("Forças", "f", sw.forcas)}
+                ${quad("Fraquezas", "w", sw.fraquezas)}
+                ${quad("Oportunidades", "o", sw.oportunidades)}
+                ${quad("Ameaças", "t", sw.ameacas)}
+            </div>
+        </section>
+
+        <section class="blocos-grid">
+            <div class="painel-card">
+                <h3>Cronograma</h3>
+                <ol class="linha-tempo">
+                    ${e.cronograma.map(c => `<li><strong>${esc(c.periodo)}</strong><span>${esc(c.marco)}</span></li>`).join("")}
+                </ol>
+            </div>
+            <div class="painel-card">
+                <h3>Orçamento mensal</h3>
+                <div class="tabela-wrap">
+                    <table class="tabela">
+                        <thead><tr><th>Item</th><th>Valor</th><th>% da receita</th></tr></thead>
+                        <tbody>
+                            ${e.orcamento.despesas.map(d => `
+                                <tr><td>${esc(d.item)}</td><td>${moeda(d.valor)}</td>
+                                <td>${(d.valor / e.orcamento.receita * 100).toFixed(1).replace(".", ",")}%</td></tr>`).join("")}
+                            <tr class="total"><td>${esc(e.orcamento.rotuloReceita)}</td><td colspan="2">${moeda(e.orcamento.receita)}</td></tr>
+                            <tr class="total"><td>Total de despesas</td><td colspan="2">${moeda(totalDesp)}</td></tr>
+                            <tr class="total"><td>Saldo previsto</td><td colspan="2" class="${saldo >= 0 ? "pos" : "neg"}">${moeda(saldo)}</td></tr>
+                            <tr class="total"><td>Custo por integrante (${INTEGRANTES})</td><td colspan="2">${moeda(totalDesp / INTEGRANTES)}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>`;
+    }
+
     document.title = setor.titulo + " | Conexão Jovem";
 
     main.innerHTML = `
-        <div class="notice">Simulação escolar: os indicadores, projetos e prazos abaixo são ilustrativos. As matérias são gerenciadas pela redação.</div>
-        <a class="action primary editorial-access" href="redacao.html">Abrir redação · Criar e editar matérias</a>
         ${navSetores}
         <section class="setor-topo">
             <h2><i class="fas ${setor.icone}"></i> ${esc(setor.titulo)}</h2>
@@ -102,6 +177,8 @@
                     <ul>${b.itens.map(i => `<li>${i}</li>`).join("")}</ul>
                 </div>`).join("")}
         </section>
+
+        ${setorId === "gestao" ? gestaoExtras() : ""}
 
         <section class="painel-card">
             <h3>Checklist do setor</h3>
