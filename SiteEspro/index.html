@@ -11,8 +11,8 @@
     <meta property="og:description" content="Música, séries, games, cultura pop e moda: o jornal digital feito por jovens, para jovens.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&q=70">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
 </head>
 <body>
 
@@ -23,7 +23,7 @@
                 <span class="date" id="current-date">Terça-feira, 11 de Agosto de 2026</span>
                 <div class="top-right-actions">
                     <div class="social-icons">
-                        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-link" data-info="redes" target="_blank" rel="noopener" aria-label="Instagram do projeto (em planejamento)"><i class="fab fa-instagram"></i></a>
                     </div>
                     <button id="intranet-access-btn" class="intranet-top-btn" type="button"><i class="fas fa-lock"></i> Área do Funcionário</button>
                 </div>
@@ -82,14 +82,10 @@
         <!-- NEWSLETTER -->
         <section class="newsletter-section" id="newsletter">
             <div>
-                <h3>Receba o Conexão Weekly</h3>
-                <p>O melhor da semana em cultura jovem, direto no seu e-mail. Sem spam.</p>
+                <h3>Leia o Conexão Weekly</h3>
+                <p>Uma seleção das matérias do jornal para ler agora, sem cadastro.</p>
             </div>
-            <form id="newsletter-form" class="newsletter-form" novalidate>
-                <input type="email" id="newsletter-email" placeholder="seu@email.com" aria-label="Seu e-mail" required>
-                <button type="submit">Quero receber</button>
-                <span id="newsletter-msg" class="newsletter-msg" role="status"></span>
-            </form>
+            <button id="weekly-btn" class="login-submit-btn" type="button">Abrir edição</button>
         </section>
 
     </main>
@@ -112,7 +108,7 @@
             <!-- TELA DE LOGIN -->
             <div id="intranet-login-view">
                 <h2><i class="fas fa-lock"></i> Intranet Conexão Jovem</h2>
-                <p>Área restrita aos colaboradores. Entre com o e-mail e a senha do seu setor:</p>
+                <p>Entre com a conta demonstrativa do seu setor. As senhas de teste estão no roteiro de apresentação.</p>
                 <form id="intranet-login-form" class="login-form" novalidate>
                     <div class="input-group">
                         <label for="employee-email"><i class="fas fa-envelope"></i> E-mail Corporativo</label>
@@ -132,7 +128,7 @@
                 <div class="dashboard-header">
                     <div>
                         <h2><i class="fas fa-building"></i> Painel Interno - <span id="user-sector-title">Setor</span></h2>
-                        <p class="welcome-msg">Bem-vindo(a), <span id="user-email-display"></span> | <span class="badge-sm orange">Nível de Acesso: Confidencial</span></p>
+                        <p class="welcome-msg">Bem-vindo(a), <span id="user-email-display"></span> | <span class="badge-sm orange">Simulação escolar</span></p>
                     </div>
                     <button id="logout-btn" class="logout-btn" type="button"><i class="fas fa-sign-out-alt"></i> Sair</button>
                 </div>
@@ -185,6 +181,7 @@
     </footer>
 
     <script src="dados.js"></script>
+    <script src="conteudo-publico.js"></script>
     <script src="editorial.js"></script>
     <script src="script.js"></script>
 </body>
