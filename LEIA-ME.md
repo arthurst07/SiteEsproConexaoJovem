@@ -1,9 +1,12 @@
-# Guia da versão atual
+# Por onde começar
 
-A versão atual é baseada no ZIP Espro-main-v3 e permite que todos os funcionários publiquem e editem suas próprias matérias a qualquer momento.
+1. Leia **APRESENTACAO.md**: ele é o roteiro principal, com preparação, logins e apresentação passo a passo.
+2. Extraia todo o ZIP.
+3. Com Python 3 instalado, abra **ABRIR_SITE.bat** no Windows, ou execute `python3 iniciar.py` em outro sistema.
+4. Use **http://127.0.0.1:8080**, com o servidor aberto.
 
-Consulte [REDACAO.md](REDACAO.md) para instruções atualizadas, contas por e-mail, permissões e backup. Os textos anteriores que limitavam a publicação à Produção e Gestão foram substituídos por essa regra.
+Não é necessário configurar Firebase ou outro serviço para a apresentação local. Todos os funcionários podem publicar e editar suas próprias matérias. Gestão e Produção também administram o acervo.
 
-O portal, as fotos, o chat e os painéis de gestão da versão 3 foram preservados. As matérias continuam salvas apenas no navegador, sem sincronização entre aparelhos.
+As alterações ficam no navegador; exporte o backup editorial para transportá-las. A newsletter é para leitura no site, sem envio por e-mail.
 
-Para abrir localmente, use `python iniciar.py` (ou `py iniciar.py` no Windows) e acesse `http://127.0.0.1:8080`. Não é necessário instalar bibliotecas Python adicionais.
+O lançador BAT exige Python instalado; ele não instala programas automaticamente.
