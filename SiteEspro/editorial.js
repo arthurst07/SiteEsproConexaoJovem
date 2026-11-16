@@ -15,12 +15,12 @@
             texto(n.criadoEm, 50) && Number.isFinite(Date.parse(n.criadoEm)) && texto(n.atualizadoEm, 50) && Number.isFinite(Date.parse(n.atualizadoEm));
     }
     function limpar(n) {return {id:n.id, cat:n.cat,titulo:n.titulo.trim(),resumo:n.resumo.trim(),autor:n.autor.trim(),responsavel:n.responsavel,status:n.status,destaque:n.destaque,texto:n.texto.map(p=>p.trim()),fontes:n.fontes.map(f=>({nome:f.nome.trim(),url:f.url})),criadoEm:n.criadoEm,atualizadoEm:n.atualizadoEm};}
-    const iniciais = NOTICIAS.map((n,i) => ({id:String(n.id),cat:n.cat,titulo:n.titulo,resumo:n.resumo,autor:n.autor,responsavel:'redacao',status:'publicado',destaque:i<4,texto:n.texto,fontes:[],criadoEm:'2026-11-09T12:00:00-03:00',atualizadoEm:'2026-11-09T12:00:00-03:00'}));
+    const iniciais = NOTICIAS.map((n,i) => ({id:String(n.id),cat:n.cat,titulo:n.titulo,resumo:n.resumo,autor:n.autor,responsavel:'redacao',status:'publicado',destaque:i<4,texto:n.texto,fontes:[],criadoEm:'2026-11-16T12:00:00-03:00',atualizadoEm:'2026-11-16T12:00:00-03:00'}));
     let erro = '';
     function ler() {
         try {
             const raw = localStorage.getItem(CHAVE);
-            if (raw === null) return iniciais.map(limpar);
+            if (raw === null) { erro=''; return iniciais.map(limpar); }
             const data = JSON.parse(raw);
             if (!Array.isArray(data) || data.length>500 || !data.every(validar) || new Set(data.map(n=>n.id)).size!==data.length) throw Error();
             erro = ''; return data.map(limpar);
@@ -29,7 +29,25 @@
     function gravar(lista, esperado, recuperar=false) {
         if (!recuperar && esperado !== snapshot()) throw Error('O conteúdo foi alterado em outra aba. Recarregue antes de salvar; copie seu texto para não perdê-lo.');
         if (!recuperar && erro) throw Error(erro);
-        if (!lista.every(validar) || lista.length>500) throw Error('Conteúdo inválido ou limite de 500 matérias atingido.');
+        if (!Array.isArray(lista) || !lista.every(validar) || new Set(lista.map(n=>n.id)).size!==lista.length || lista.length>500) throw Error('Conteúdo inválido ou limite de 500 matérias atingido.');
+        const usuario = sessao();
+        if (!usuario) throw Error('Entre pela Área do Funcionário antes de salvar.');
+        if (recuperar && !editor(usuario)) throw Error('Apenas Produção e Gestão podem importar o acervo completo.');
+        if (!recuperar) {
+            const anteriores = ler();
+            if (erro) throw Error(erro);
+            const proxima = new Map(lista.map(n=>[n.id,n]));
+            for (const anterior of anteriores) {
+                const nova = proxima.get(anterior.id);
+                if (!nova || JSON.stringify(limpar(nova)) !== JSON.stringify(limpar(anterior))) {
+                    if (!podeEditar(anterior,usuario)) throw Error('Você só pode alterar ou excluir suas próprias matérias.');
+                    if (nova && nova.responsavel !== anterior.responsavel) throw Error('O responsável de uma matéria não pode ser alterado.');
+                    if (nova && !editor(usuario) && nova.destaque !== anterior.destaque) throw Error('Destaques são organizados pela Produção e Gestão.');
+                }
+            }
+            const ids = new Set(anteriores.map(n=>n.id));
+            if (lista.some(n=>!ids.has(n.id) && (n.responsavel !== usuario.email || (!editor(usuario)&&n.destaque)))) throw Error('Novas matérias devem pertencer à conta conectada.');
+        }
         try {localStorage.setItem(CHAVE,JSON.stringify(lista.map(limpar)));erro='';}
         catch {throw Error('Não foi possível salvar neste navegador. Libere espaço ou habilite o armazenamento. O formulário continua preenchido.');}
         window.dispatchEvent(new Event('cj:atualizado'));
@@ -37,7 +55,8 @@
     function snapshot(){try{return localStorage.getItem(CHAVE);}catch {return 'indisponivel';}}
     function sessao(){try{const s=JSON.parse(sessionStorage.getItem('cj_sessao'));return s && USUARIOS[s.email]?.setor === s.setor ? s : null;}catch{return null;}}
     function editor(s){return !!s && ['gestao','producao'].includes(s.setor);}
+    function podeEditar(n,s=sessao()) { return !!s && (editor(s) || n.responsavel === s.email); }
     function decorar(n) {const cor={musica:'pink',series:'blue',cultura:'orange',games:'pink',moda:'orange'}; const icone={musica:'fa-headphones-alt',series:'fa-film',cultura:'fa-book-open',games:'fa-gamepad',moda:'fa-palette'};return {...n,label:CATEGORIAS[n.cat].nome.toUpperCase(),cor:cor[n.cat],icone:icone[n.cat],tempo:data(n.atualizadoEm)};}
     function data(v){return new Date(v).toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});}
-    window.CJ={ler,gravar,snapshot,sessao,editor,esc,validar,data,get erro(){return erro;},publicadas:()=>ler().filter(n=>n.status==='publicado').sort((a,b)=>Date.parse(b.atualizadoEm)-Date.parse(a.atualizadoEm)).map(decorar)};
+    window.CJ={ler,gravar,snapshot,sessao,editor,podeEditar,esc,validar,data,get erro(){return erro;},publicadas:()=>ler().filter(n=>n.status==='publicado').sort((a,b)=>Date.parse(b.atualizadoEm)-Date.parse(a.atualizadoEm)).map(decorar)};
 })();
