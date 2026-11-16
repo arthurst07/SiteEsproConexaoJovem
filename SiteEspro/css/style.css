@@ -6,7 +6,7 @@
     --brand-blue: #1d7dbc;
     --dark-neutral: #1a1a1a;
     --gray-light: #f4f5f7;
-    --font-main: 'Trebuchet MS', Arial, sans-serif;
+    --font-main: 'Poppins', sans-serif;
 }
 
 
@@ -483,73 +483,96 @@ footer { background-color: var(--dark-neutral); color: var(--bg-white); padding:
     .hero-main h2 { font-size: 1.5rem; }
 }
 
-/* Ajustes da edição escolar: componentes locais e redação */
-[hidden] { display:none !important; }
-:root { --primary-orange:#ff9f5a; }
-a { color:#165d90; }
-button, input, textarea, select { font:inherit; }
-button { cursor:pointer; }
-:focus-visible { outline:3px solid #165d90; outline-offset:3px; }
-.sr-only { position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%); }
-.skip-link { position:fixed;top:-100px;left:12px;background:white;padding:12px;z-index:3000; }
-.skip-link:focus { top:8px; }
-.notice { background:#fff4e7;border-left:4px solid var(--primary-orange);padding:14px 18px;margin:22px 0;font-size:.87rem;border-radius:6px; }
-.action { display:inline-flex;align-items:center;justify-content:center;gap:6px;background:white;color:#253447;border:1px solid #ccd3db;padding:10px 16px;border-radius:8px;font-size:.87rem;font-weight:600;text-decoration:none;min-height:44px; }
-.action:hover { background:#f1f5fa; }
-.action.primary { background:#165d90;color:white;border-color:#165d90; }
-.action.danger { color:#9a243c; }
-.intranet-top-btn { color:#382516;min-height:32px; }
-.badge-sm.orange { color:#382516; }
-.badge-sm.pink,.badge { background:#bc2850; }
-.badge-sm.blue { background:#165d90; }
-.search-box button { min-width:28px;min-height:28px;color:#333;font-size:1.4rem;line-height:1; }
-.demo-accounts { text-align:left;font-size:.85rem;margin-top:20px;background:#f4f5f7;padding:16px;border-radius:8px; }
-.demo-accounts li { margin:10px 0;overflow-wrap:anywhere; }
-.demo-accounts ul { list-style:none; }
-.demo-accounts summary { cursor:pointer;font-weight:bold; }
-.editorial-access { margin:15px 0; }
-.eyebrow { color:#8b2440;font-size:.75rem;font-weight:bold;letter-spacing:.08em; }
-.editor-status { margin:15px 0;color:#176138; }
-.editor-status.error,.error { color:#9a243c; }
-.editor-counts { display:flex;gap:15px;flex-wrap:wrap;margin:15px 0; }
-.editor-counts span { background:#f4f5f7;border-radius:8px;padding:8px 12px; }
-.editor-toolbar { display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-bottom:15px; }
-.editor-toolbar label:not(.import-label), .editor-fields label { display:flex;flex-direction:column;gap:6px;font-size:.9rem;font-weight:600; }
-.editor-toolbar input,.editor-toolbar select,.editor-fields input,.editor-fields select,.editor-fields textarea { width:100%;border:1px solid #b7c3ce;border-radius:6px;padding:10px;background:white;color:#1a1a1a;min-width:0; }
-.import-label { flex-wrap:wrap;cursor:pointer;max-width:100%; }
-.import-label input { font-size:.75rem;max-width:210px; }
-.editor-row { display:flex;gap:20px;justify-content:space-between;align-items:center;border-top:1px solid #e5e7eb;padding:20px 0; }
-.editor-row h4 { margin:8px 0;font-size:1rem;overflow-wrap:anywhere; }
-.editor-row p { font-size:.8rem;color:#555; }
-.editor-row > div:first-child { min-width:0; }
-.row-actions { display:flex;gap:8px;flex-shrink:0; }
-.editor-fields { display:grid;grid-template-columns:1fr 1fr;gap:18px; }
-.editor-fields .wide { grid-column:1/-1; }
-.editor-fields textarea { resize:vertical; }
-.editor-fields small { font-size:.8rem;font-weight:normal;color:#555; }
-.editor-actions { display:flex;flex-wrap:wrap;gap:10px;margin:18px 0; }
-.check-line { display:flex;gap:10px;align-items:center;margin:15px 0; }
-.article-preview { border-top:3px solid #f94b76;margin-top:24px;padding-top:24px;overflow-wrap:anywhere; }
-.article-preview p { white-space:pre-line;margin:16px 0;font-family:Georgia,serif;line-height:1.8; }
-.article-sources { padding-left:22px; }
-.modal-body { overflow-wrap:anywhere; }
-.modal-body p { white-space:pre-line; }
-.weekly-item { border-top:1px solid #ddd;margin:20px 0;padding-top:12px; }
-.weekly-item h3 { margin-bottom:10px; }
-.hero-main h2,.card-content h4,.side-news h4 { overflow-wrap:anywhere; }
-.fas,.fab { font-style:normal;display:inline-block; }
-.fas::before,.fab::before { content:'✦'; }
-.fa-lock::before,.fa-shield-alt::before { content:'▣'; }
-.fa-headphones-alt::before,.fa-guitar::before { content:'♫'; }
-.fa-film::before,.fa-tv::before,.fa-clapperboard::before { content:'▶'; }
-.fa-gamepad::before,.fa-dice-d20::before { content:'⚄'; }
-.fa-palette::before,.fa-camera-retro::before,.fa-spray-can::before { content:'◉'; }
-.fa-book-open::before,.fa-newspaper::before { content:'▤'; }
-.fa-envelope::before,.fa-envelope-open-text::before { content:'✉'; }
-.fa-microphone::before,.fa-podcast::before { content:'♬'; }
-.fa-arrow-right::before { content:'→'; }.fa-arrow-left::before { content:'←'; }
-.fa-times::before { content:'×'; }
-.card-img { height:130px; }
-@media(min-width:600px) and (max-width:900px) { .grid { grid-template-columns:1fr 1fr; } }
-@media(max-width:600px) { .editor-fields { grid-template-columns:1fr; }.editor-row { align-items:start;flex-direction:column; }.setor-header .flex-between { flex-wrap:wrap;gap:15px; }.dashboard-header { align-items:start;gap:10px;flex-wrap:wrap; }.editor-toolbar > label { width:100%; }.hero-main { padding:25px;min-height:320px; }.card-img { height:100px; }.modal-content { padding:30px 20px; }.logo h1 { font-size:1.6rem; }.setor-user { overflow-wrap:anywhere; } }
-@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto !important;transition:none !important; } }
+
+/* =========================================================
+   FOTOS DAS MATÉRIAS
+   ========================================================= */
+.card-img { position: relative; overflow: hidden; }
+.card-img img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.4s;
+}
+.news-card:hover .card-img img { transform: scale(1.05); }
+.side-news { display: flex; gap: 12px; align-items: center; }
+.side-thumb { width: 84px; height: 84px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+.side-text { min-width: 0; }
+.article-figure { margin: 0 0 18px; }
+.article-figure img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 10px; display: block; }
+.article-figure figcaption { font-size: 0.72rem; color: #888; margin-top: 6px; font-family: var(--font-main); }
+.aviso-demo { font-size: 0.75rem; color: #aaa; margin-top: 6px; }
+.aviso-demo a { color: var(--secondary-yellow); }
+
+/* =========================================================
+   PÁGINA DA GESTÃO: organograma, SWOT, cronograma, orçamento
+   ========================================================= */
+.painel-card h3.sub { margin-top: 18px; }
+.painel-card p { font-size: 0.9rem; color: #333; }
+.org { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.org-no { background: var(--bg-white); border: 2px solid var(--brand-blue); border-radius: 8px; padding: 10px 16px; font-size: 0.85rem; font-weight: 600; text-align: center; }
+.org-raiz { background: var(--brand-blue); color: var(--bg-white); }
+.org-filhos { list-style: none; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; padding: 0 !important; position: relative; }
+.org-filhos li { margin: 0; position: relative; }
+.org-filhos::before { content: ""; position: absolute; top: -18px; left: 50%; width: 2px; height: 18px; background: var(--brand-blue); }
+.swot { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.swot-q { border-radius: 8px; padding: 14px 16px; }
+.swot-q h4 { margin-bottom: 6px; font-size: 0.95rem; }
+.swot-q ul { padding-left: 18px !important; font-size: 0.85rem; }
+.swot-q.f { background: #e3f6ea; } .swot-q.w { background: #fff1de; }
+.swot-q.o { background: #e6f0f8; } .swot-q.t { background: #fde6ec; }
+.linha-tempo { list-style: none; border-left: 3px solid var(--primary-orange); padding-left: 18px !important; }
+.linha-tempo li { margin-bottom: 14px !important; position: relative; display: flex; flex-direction: column; }
+.linha-tempo li::before { content: ""; position: absolute; left: -26px; top: 5px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent-pink); }
+.linha-tempo span { font-size: 0.88rem; color: #333; }
+.tabela tr.total td { font-weight: 700; border-top: 2px solid #ddd; }
+.tabela td.pos { color: #1b7a43; } .tabela td.neg { color: #c0213f; }
+
+@media (max-width: 900px) {
+    .swot { grid-template-columns: 1fr; }
+    .side-thumb { width: 70px; height: 70px; }
+}
+
+
+/* =========================================================
+   CHAT DA EQUIPE
+   ========================================================= */
+.voltar-link-escuro { color: var(--brand-blue); text-decoration: none; font-weight: 600; font-size: 0.85rem; }
+.voltar-link-escuro:hover { text-decoration: underline; }
+.chat-link { background: var(--brand-blue) !important; }
+.chat { margin: 30px 0; background: var(--bg-white); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); padding: 20px; }
+.chat-topo { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.chat-topo h2 { font-size: 1.4rem; }
+.chat-topo h2 i { color: var(--accent-pink); margin-right: 6px; }
+.chat-modo { font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+.chat-modo.online { background: #e3f6ea; color: #1b7a43; }
+.chat-modo.teste { background: #fff1de; color: #b4651b; }
+.chat-dica { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
+.chat-abas { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.chat-abas button { background: var(--gray-light); border: 1px solid #ddd; border-radius: 20px; padding: 6px 14px; font-family: var(--font-main); font-size: 0.8rem; cursor: pointer; }
+.chat-abas button.ativo { background: var(--brand-blue); color: var(--bg-white); border-color: var(--brand-blue); }
+.chat-lista { list-style: none; height: 420px; overflow-y: auto; padding: 10px; background: var(--gray-light); border-radius: 10px; display: flex; flex-direction: column; gap: 10px; }
+.chat-vazio { text-align: center; color: #888; padding: 40px 10px; font-size: 0.9rem; }
+.chat-msg { background: var(--bg-white); border-radius: 10px; padding: 10px 14px; border-left: 4px solid #ccc; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.chat-msg.tarefa { border-left-color: var(--brand-blue); }
+.chat-msg.duvida { border-left-color: var(--primary-orange); }
+.chat-msg.aviso { border-left-color: var(--accent-pink); }
+.chat-msg.feita { opacity: 0.7; }
+.chat-msg.feita .chat-texto { text-decoration: line-through; }
+.chat-msg-topo { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.8rem; }
+.chat-tipo { font-weight: 700; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; color: var(--bg-white); }
+.chat-tipo.tarefa { background: var(--brand-blue); } .chat-tipo.duvida { background: var(--primary-orange); } .chat-tipo.aviso { background: var(--accent-pink); }
+.chat-setor, .chat-hora { color: #888; font-size: 0.72rem; }
+.chat-ok { color: #1b7a43; font-weight: 700; font-size: 0.72rem; }
+.chat-texto { margin: 6px 0; font-size: 0.92rem; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere; font-family: var(--font-main); }
+.chat-acoes { display: flex; gap: 8px; }
+.chat-acoes button { background: none; border: none; color: var(--brand-blue); font-family: var(--font-main); font-size: 0.75rem; font-weight: 600; cursor: pointer; padding: 2px 0; }
+.chat-acoes button.perigo { color: #c0213f; }
+.chat-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.chat-linha { display: flex; gap: 8px; }
+.chat-linha input, .chat-linha select, .chat-form textarea { padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-main); font-size: 0.9rem; }
+.chat-linha input { flex: 1; min-width: 0; }
+.chat-form textarea { resize: vertical; width: 100%; }
+.chat-rodape { justify-content: space-between; align-items: center; }
+.chat-contador { font-size: 0.75rem; color: #888; }
+.chat-enviar { width: auto; padding: 10px 22px; margin: 0; }
+.chat-erro { color: #c0213f; font-size: 0.82rem; margin-top: 8px; }
+@media (max-width: 520px) { .chat-lista { height: 340px; } .chat-linha { flex-direction: column; } .chat-rodape { flex-direction: row; } }
