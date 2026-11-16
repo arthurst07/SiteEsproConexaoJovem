@@ -23,7 +23,7 @@
     }
 
     const main = $("chat-main");
-    const sessao = lerJSON("sessionStorage", CHAVE_SESSAO, null);
+    const sessao = CJ.sessao();
 
     /* ---- Só funcionários ---- */
     if (!sessao || !SETORES[sessao.setor]) {
@@ -50,28 +50,45 @@
     const urlFirebase = (CHAT_CONFIG.firebaseUrl || "").trim().replace(/\/+$/, "");
     const compartilhado = urlFirebase !== "";
 
+    function validarMensagem(m) {
+        const txt = (v,max) => typeof v==='string' && v.trim().length>0 && v.length<=max;
+        return m && txt(m.id,150) && txt(m.autor,30) && txt(m.texto,500) && txt(m.dono,150) &&
+            Object.hasOwn(SETORES,m.setor) && ['tarefa','duvida','aviso'].includes(m.tipo) &&
+            ['aberta','resolvida'].includes(m.status) && Number.isFinite(m.ts);
+    }
+    function checarSessao() {
+        if (CJ.sessao()?.email !== sessao.email) throw Error('Sua sessão mudou. Entre novamente.');
+    }
+    function lerMensagens() {
+        let lista;
+        try { lista=JSON.parse(localStorage.getItem(CHAVE_LOCAL) || '[]'); }
+        catch { throw Error('Não foi possível ler as mensagens deste navegador.'); }
+        if (!Array.isArray(lista) || !lista.every(validarMensagem)) throw Error('O histórico local está inválido. Nenhuma mensagem foi alterada.');
+        return lista.slice(-200);
+    }
+    function salvarMensagens(lista) {
+        if (!gravarJSON('localStorage',CHAVE_LOCAL,lista)) throw Error('Não foi possível salvar o chat. Habilite o armazenamento do navegador ou libere espaço.');
+    }
     const backendLocal = {
-        listar() {
-            return Promise.resolve(lerJSON("localStorage", CHAVE_LOCAL, []).slice(-200));
+        async listar() { return lerMensagens(); },
+        async enviar(msg) {
+            checarSessao();
+            const lista=lerMensagens();
+            lista.push({...msg,id:'m'+Date.now()+Math.random().toString(36).slice(2,7)});
+            salvarMensagens(lista.slice(-200));
         },
-        enviar(msg) {
-            const lista = lerJSON("localStorage", CHAVE_LOCAL, []);
-            msg.id = "m" + Date.now() + Math.random().toString(36).slice(2, 7);
-            lista.push(msg);
-            gravarJSON("localStorage", CHAVE_LOCAL, lista.slice(-200));
-            return Promise.resolve();
+        async atualizar(id,patch) {
+            checarSessao();
+            const lista=lerMensagens(), m=lista.find(x=>x.id===id);
+            if (!m) throw Error('A mensagem foi removida. Atualize a página.');
+            m.status=patch.status;
+            salvarMensagens(lista);
         },
-        atualizar(id, patch) {
-            const lista = lerJSON("localStorage", CHAVE_LOCAL, []);
-            const m = lista.find(x => x.id === id);
-            if (m) Object.assign(m, patch);
-            gravarJSON("localStorage", CHAVE_LOCAL, lista);
-            return Promise.resolve();
-        },
-        apagar(id) {
-            const lista = lerJSON("localStorage", CHAVE_LOCAL, []).filter(x => x.id !== id);
-            gravarJSON("localStorage", CHAVE_LOCAL, lista);
-            return Promise.resolve();
+        async apagar(id) {
+            checarSessao();
+            const lista=lerMensagens(), m=lista.find(x=>x.id===id);
+            if (!m || !podeApagar(m)) throw Error('Você não pode apagar esta mensagem.');
+            salvarMensagens(lista.filter(x=>x.id!==id));
         }
     };
 
@@ -122,8 +139,8 @@
                     ${compartilhado ? "Chat compartilhado (online)" : "Modo teste (mensagens só neste navegador)"}
                 </span>
             </div>
-            ${compartilhado ? "" : `<p class="chat-dica">Para a turma conversar de verdade em aparelhos diferentes, configure o chat online (veja <strong>CHAT.md</strong>).</p>`}
-            <div class="chat-abas" id="chat-abas" role="tablist">
+            ${compartilhado ? "" : `<p class="chat-dica">Para a turma conversar de verdade em aparelhos diferentes, o chat precisa de um banco online. Para apresentar hoje, demonstre aqui no mesmo navegador; o histórico fica salvo neste computador.</p>`}
+            <div class="chat-abas" id="chat-abas" role="group" aria-label="Filtrar mensagens">
                 <button type="button" class="ativo" data-filtro="todas">Todas</button>
                 <button type="button" data-filtro="tarefa">Tarefas</button>
                 <button type="button" data-filtro="duvida">Dúvidas</button>
@@ -222,8 +239,8 @@
             desenhar();
             if (rolagem || forcar) lista.scrollTop = lista.scrollHeight;
             mostrarErro("");
-        }).catch(() => {
-            mostrarErro("Não foi possível falar com o chat online agora. Confira a internet e a configuração (CHAT.md).");
+        }).catch(err => {
+            mostrarErro(compartilhado ? "Não foi possível acessar o chat online. Confira a conexão e CHAT.md." : err.message);
         });
     }
 
@@ -235,8 +252,11 @@
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true })); }
     });
 
+    let enviando = false;
     form.addEventListener("submit", e => {
         e.preventDefault();
+        if(enviando) return;
+        try { checarSessao(); } catch(err) { mostrarErro(err.message); return; }
         const nome = campoNome.value.trim().slice(0, 30);
         const texto = campoTexto.value.trim().slice(0, 500);
         if (!nome) { mostrarErro("Digite seu nome."); campoNome.focus(); return; }
@@ -245,11 +265,14 @@
         gravarJSON("localStorage", CHAVE_NOME, nome);
         const msg = { autor: nome, setor: sessao.setor, dono: sessao.email, tipo, texto, ts: Date.now(), status: "aberta" };
         mostrarErro("");
+        enviando=true;
+        const enviar = form.querySelector('button[type="submit"]');
+        enviar.disabled=true;
         backend.enviar(msg).then(() => {
             campoTexto.value = "";
             $("chat-contador").textContent = "0 / 500";
             return atualizar(true);
-        }).catch(() => mostrarErro("Não consegui enviar. Tente de novo."));
+        }).catch(err => mostrarErro(compartilhado ? "Não consegui enviar. O texto foi preservado; confira a conexão e tente novamente." : err.message)).finally(()=>{enviando=false;enviar.disabled=false;});
     });
 
     /* ---- Ações em mensagens ---- */
@@ -260,14 +283,17 @@
         const id = item.getAttribute("data-id");
         const m = mensagens.find(x => String(x.id) === id);
         if (!m) return;
+        try { checarSessao(); } catch(err) { mostrarErro(err.message); return; }
         let promessa;
         if (botao.getAttribute("data-acao") === "alternar") {
             promessa = backend.atualizar(id, { status: m.status === "resolvida" ? "aberta" : "resolvida" });
         } else {
+            if (!podeApagar(m)) { mostrarErro("Você só pode apagar suas próprias mensagens."); return; }
             if (!window.confirm("Apagar esta mensagem?")) return;
             promessa = backend.apagar(id);
         }
-        promessa.then(() => atualizar(false)).catch(() => mostrarErro("Não consegui concluir a ação."));
+        botao.disabled=true;
+        promessa.then(() => atualizar(false)).catch(err => mostrarErro(compartilhado ? "Não consegui concluir a ação. Confira sua conexão." : err.message)).finally(()=>botao.disabled=false);
     });
 
     /* ---- Abas ---- */
@@ -275,7 +301,7 @@
         const b = e.target.closest("button[data-filtro]");
         if (!b) return;
         filtro = b.getAttribute("data-filtro");
-        document.querySelectorAll("#chat-abas button").forEach(x => x.classList.toggle("ativo", x === b));
+        document.querySelectorAll("#chat-abas button").forEach(x => { x.classList.toggle("ativo", x === b); x.setAttribute("aria-pressed",String(x===b)); });
         desenhar();
     });
 
