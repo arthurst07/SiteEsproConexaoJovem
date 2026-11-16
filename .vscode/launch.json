@@ -4,8 +4,8 @@
         {
             "type": "msedge",
             "request": "launch",
-            "name": "Abrir index.html",
-            "file": "${workspaceFolder}/SiteEspro/index.html"
+            "name": "Abrir jornal (inicie iniciar.py antes)",
+            "url": "http://127.0.0.1:8080"
         }
     ]
 }
