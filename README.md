@@ -1,21 +1,15 @@
-# Conexão Jovem
+# Conexão Jovem — versão 3 com redação
 
-Jornal digital desenvolvido para uma atividade escolar de gestão de uma empresa fictícia.
+Versão baseada em **Espro-main-v3.zip**, preservando fotos, chat da equipe, orçamento, organograma e demais painéis.
 
-## Baixar e abrir
+**Todos os funcionários podem publicar e editar suas próprias matérias, inclusive depois de publicadas.** Acesse **Área do Funcionário → Minhas matérias · Publicar e editar**. Produção e Gestão mantêm a administração do acervo.
 
-1. Clique em **Code → Download ZIP** e extraia a pasta inteira.
-2. Com Python 3 instalado, execute `python iniciar.py` (ou `py iniciar.py` no Windows).
-3. Acesse `http://127.0.0.1:8080` e mantenha o terminal aberto.
+- [Guia de publicação, permissões e armazenamento](REDACAO.md)
+- [Documentação geral](Geral.md)
+- [Publicar o código no GitHub Pages](PUBLICAR.md)
+- [Chat da equipe](CHAT.md)
+- [Roteiro de apresentação](APRESENTACAO.md)
 
-Também é possível servir a pasta `SiteEspro` com o Live Server do VS Code.
+Para baixar: **Code → Download ZIP**. Extraia tudo e execute `python iniciar.py` (ou `py iniciar.py` no Windows) com Python 3 instalado. Abra `http://127.0.0.1:8080`.
 
-## Redação
-
-Na **Área do Funcionário**, abra **Contas de demonstração** e entre com uma conta de Produção ou Gestão para publicar. Clique em **Abrir redação · Criar e editar matérias**.
-
-O fluxo inclui rascunhos, revisão, publicação, edição, fontes, prévia, destaques e backup. Todos os setores podem propor matérias; Produção e Gestão publicam.
-
-**Este projeto é uma simulação local.** As contas são demonstrativas e públicas. O conteúdo fica no navegador e não sincroniza entre computadores. Use a exportação/importação de backup para transportar as matérias. Não use dados ou senhas pessoais.
-
-Consulte o [guia completo](LEIA-ME.md) para contas, permissões, armazenamento e orientações de apresentação.
+As matérias ficam neste navegador, sem sincronização entre computadores; não são enviadas ao GitHub ou ao Firebase do chat. Use backup para transportar o acervo. O login e as contas são demonstrativos. Consulte REDACAO.md para os limites da simulação e a diferença entre contas por setor e contas por pessoa.
